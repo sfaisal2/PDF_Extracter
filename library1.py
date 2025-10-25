@@ -1,13 +1,8 @@
+import time
 import pymupdf as fitz
 import pymupdf4llm
 from pypdf import PdfReader
 import pdfplumber
-
-doc = fitz.open('sample.pdf')
-text = ""
-for page in doc:
-    text += page.get_text()
-print(text)
 
 extractors = [
     "pymupdf",
@@ -22,7 +17,31 @@ samples = [
     "sample3.pdf"
 ]
 
-def extraction():
-    
+def extraction(file: str, extractor: str):
+    output = ""
+    if extractor == "pymupdf":
+        doc = fitz.open(file)
+        text = ""
+        for page in doc:
+            text += page.get_text()
+        output += text
+        output += "\n\n"
+    elif extractor == "pymupdf4llm":
+        output = pymupdf4llm.to_markdown(file)
+    elif extractor == "pypdf":
+        reader = PdfReader(file)
+        pages = reader.pages
+        for page in pages:
+            text = page.extract_text()
+            output += text
+            output += "\n\n"
+    elif extractor == "pdfplumber":
+        with pdfplumber.open(file) as pdf:
+            for page in pdf.pages:
+                output += page.extract_text()
+                output += "\n\n"
+    else: 
+        raise ValueError(f"Invalid extractor: {extractor}")
+    return output
 
 def main():
