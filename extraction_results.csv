@@ -1,0 +1,13 @@
+file,extractor,time_taken
+sample.pdf,pymupdf,0.015
+sample.pdf,pymupdf4llm,0.098
+sample.pdf,pypdf,0.035
+sample.pdf,pdfplumber,0.101
+sample2.pdf,pymupdf,0.021
+sample2.pdf,pymupdf4llm,0.189
+sample2.pdf,pypdf,0.066
+sample2.pdf,pdfplumber,0.147
+sample3.pdf,pymupdf,0.003
+sample3.pdf,pymupdf4llm,0.509
+sample3.pdf,pypdf,0.005
+sample3.pdf,pdfplumber,0.004

@@ -6,7 +6,7 @@ import pdfplumber
 
 extractors = [
     "pymupdf",
-    "pymupdf4llm"
+    "pymupdf4llm",
     "pypdf",
     "pdfplumber"
 ]
@@ -45,3 +45,7 @@ def extraction(file: str, extractor: str):
     return output
 
 def main():
+    for file in samples:
+        for extractor in extractors:
+            start_time = time.time()
+            print (f"\nExtracting {file}")
