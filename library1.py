@@ -43,9 +43,3 @@ def extraction(file: str, extractor: str):
     else: 
         raise ValueError(f"Invalid extractor: {extractor}")
     return output
-
-def main():
-    for file in samples:
-        for extractor in extractors:
-            start_time = time.time()
-            print (f"\nExtracting {file}")
