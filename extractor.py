@@ -66,57 +66,22 @@ def extraction(file: str, extractor: str):
         
     return output
 
-def analyze_extraction_quality(text):
-    if text.startswith("EXTRACTION_ERROR"):
-        return 0, 0, 0, 0
-    
-    lines = text.split('\n')
-    non_empty_lines = [line.strip() for line in lines if line.strip()]
-    
-    # Calculate quality metrics
-    total_lines = len(lines)
-    meaningful_lines = len(non_empty_lines)
-    avg_line_length = sum(len(line) for line in non_empty_lines) / meaningful_lines if meaningful_lines > 0 else 0
-    total_chars = len(text)
-    
-    # Simple quality score (0-100)
-    if total_chars == 0:
-        quality_score = 0
-    else:
-        # Based on line structure, content density, etc.
-        line_quality = (meaningful_lines / total_lines * 100) if total_lines > 0 else 0
-        density_quality = min(100, avg_line_length / 2)  # Assuming good lines are 50+ chars
-        quality_score = (line_quality + density_quality) / 2
-    
-    return quality_score, total_chars, meaningful_lines, avg_line_length
-
-def save_to_csv(results, csv_filename="extraction_results.csv"):
-    """Save results to CSV file"""
-    with open(csv_filename, 'w', newline='', encoding='utf-8') as csvfile:
-        fieldnames = ['timestamp', 'file', 'extractor', 'time_taken', 'quality_score', 
-                     'total_chars', 'meaningful_lines', 'avg_line_length', 'status']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        
-        writer.writeheader()
-        for result in results:
-            writer.writerow(result)
-    
-    print(f"\n✅ Results saved to: {csv_filename}")
-
 def main():
     results = []
-    
-    print("🚀 Starting PDF Extraction Benchmark")
-    print("=" * 60)
+   
+    # First, get baseline char counts for each file
+    baseline_chars = {}
+    for file in samples:
+        if os.path.exists(file):
+            baseline_chars[file] = get_baseline_char_count(file)
+            print(f"{file}: Baseline = {baseline_chars[file]} chars")
     
     for file in samples:
-        # Check if file exists
         if not os.path.exists(file):
-            print(f"⚠️  File not found: {file}, skipping...")
+            print(f"File not found: {file}, skipping...")
             continue
             
-        print(f"\n📄 Processing: {file}")
-        print("-" * 40)
+        print(f"\n Processing: {file}")
         
         for extractor in extractors:
             try:
@@ -126,81 +91,70 @@ def main():
                 extracted_text = extraction(file, extractor)
                 end_time = time.time()
                 
-                time_taken = end_time - start_time
+                time_taken = round(end_time - start_time, 3)
                 
-                # Analyze extraction quality
-                if extracted_text.startswith("EXTRACTION_ERROR"):
-                    quality_score, total_chars, meaningful_lines, avg_line_length = 0, 0, 0, 0
-                    status = "ERROR"
+                # Calculate if all chars were extracted
+                extracted_char_count = len(extracted_text) if not extracted_text.startswith("EXTRACTION_ERROR") else 0
+                baseline = baseline_chars.get(file, 0)
+                
+                if baseline > 0 and extracted_char_count > 0:
+                    # Consider it "all chars extracted" if within 95% of baseline
+                    all_chars_extracted = (extracted_char_count >= baseline * 0.95)
+                    chars_status = "ALL_EXTRACTED" if all_chars_extracted else "PARTIAL_EXTRACTION"
                 else:
-                    quality_score, total_chars, meaningful_lines, avg_line_length = analyze_extraction_quality(extracted_text)
-                    status = "SUCCESS"
+                    chars_status = "UNKNOWN"  # Can't determine without baseline
                 
-                # Store results
+                # Store results - only the 4 metrics you want
                 result = {
-                    'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     'file': file,
                     'extractor': extractor,
-                    'time_taken': round(time_taken, 3),
-                    'quality_score': round(quality_score, 2),
-                    'total_chars': total_chars,
-                    'meaningful_lines': meaningful_lines,
-                    'avg_line_length': round(avg_line_length, 2),
-                    'status': status
+                    'time_taken': time_taken,
+                    'chars_status': chars_status,
+                    'extracted_chars': extracted_char_count,
+                    'baseline_chars': baseline
                 }
                 results.append(result)
                 
-                print(f"✅ {time_taken:.3f}s | Quality: {quality_score:.1f}% | Chars: {total_chars}")
+                status_icon = "✅" if chars_status == "ALL_EXTRACTED" else "⚠️"
+                print(f"{status_icon} {time_taken}s | {chars_status}")
                 
-                # Save sample of extracted text to individual files
-                sample_filename = f"extracted_{os.path.splitext(file)[0]}_{extractor}.txt"
-                with open(sample_filename, 'w', encoding='utf-8') as f:
-                    f.write(extracted_text[:5000] + "\n\n...[truncated]..." if len(extracted_text) > 5000 else extracted_text)
-                    
             except Exception as e:
                 print(f"❌ FAILED: {str(e)}")
-                # Record error in results
                 results.append({
-                    'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     'file': file,
                     'extractor': extractor,
                     'time_taken': 0,
-                    'quality_score': 0,
-                    'total_chars': 0,
-                    'meaningful_lines': 0,
-                    'avg_line_length': 0,
-                    'status': f"ERROR: {str(e)}"
+                    'chars_status': 'EXTRACTION_FAILED',
+                    'extracted_chars': 0,
+                    'baseline_chars': baseline_chars.get(file, 0)
                 })
     
-    # Save all results to CSV
+    # Save to CSV
     if results:
-        save_to_csv(results)
-        
-        # Print summary
-        print("\n" + "=" * 60)
-        print("📊 EXTRACTION SUMMARY")
-        print("=" * 60)
-        
-        # Group by extractor for summary
-        extractor_stats = {}
-        for result in results:
-            extractor = result['extractor']
-            if extractor not in extractor_stats:
-                extractor_stats[extractor] = {'count': 0, 'total_time': 0, 'total_quality': 0, 'successes': 0}
+        csv_filename = "extraction_results.csv"
+        with open(csv_filename, 'w', newline='', encoding='utf-8') as csvfile:
+            fieldnames = ['file', 'extractor', 'time_taken', 'chars_status', 'extracted_chars', 'baseline_chars']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             
-            extractor_stats[extractor]['count'] += 1
-            extractor_stats[extractor]['total_time'] += result['time_taken']
-            extractor_stats[extractor]['total_quality'] += result['quality_score']
-            if result['status'] == 'SUCCESS':
-                extractor_stats[extractor]['successes'] += 1
+            writer.writeheader()
+            for result in results:
+                writer.writerow(result)
         
-        print(f"\n{'Extractor':15} {'Success Rate':12} {'Avg Time':10} {'Avg Quality':12}")
-        print("-" * 60)
-        for extractor, stats in extractor_stats.items():
-            success_rate = (stats['successes'] / stats['count']) * 100
-            avg_time = stats['total_time'] / stats['count']
-            avg_quality = stats['total_quality'] / stats['count']
-            print(f"{extractor:15} {success_rate:10.1f}% {avg_time:8.3f}s {avg_quality:11.1f}%")
+        print(f"\n✅ Results saved to: {csv_filename}")
+        
+        # Print simple summary
+        print("\n📊 SUMMARY")
+        print("=" * 50)
+        for extractor in extractors:
+            extractor_results = [r for r in results if r['extractor'] == extractor]
+            successful = [r for r in extractor_results if r['chars_status'] == 'ALL_EXTRACTED']
+            times = [r['time_taken'] for r in successful if r['time_taken'] > 0]
+            
+            if times:
+                avg_time = sum(times) / len(times)
+                print(f"{extractor:15} - Avg: {avg_time:.3f}s | Complete: {len(successful)}/{len(extractor_results)}")
+            else:
+                print(f"{extractor:15} - No complete extractions")
     
     else:
         print("❌ No results to save!")
