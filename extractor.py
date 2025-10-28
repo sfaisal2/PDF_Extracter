@@ -5,7 +5,6 @@ from pypdf import PdfReader
 import pdfplumber
 import csv
 import os
-from datetime import datetime
 
 extractors = [
     "pymupdf",
@@ -16,9 +15,19 @@ extractors = [
 
 samples = [
     "sample.pdf",
-    "sample2.pdf", 
-    "sample3.pdf"
+    "sample2.pdf"
 ]
+
+def get_baseline_char_count(file: str):
+    try:
+        doc = fitz.open(file)
+        text = ""
+        for page in doc:
+            text += page.get_text()
+        doc.close()
+        return len(text)
+    except:
+        return 0
 
 def extraction(file: str, extractor: str):
     output = ""
@@ -32,7 +41,6 @@ def extraction(file: str, extractor: str):
             doc.close()
             
         elif extractor == "pymupdf4llm":
-            # Fixed: use get_markdown_text instead of to_markdown
             output = pymupdf4llm.to_markdown(file)
             
         elif extractor == "pypdf":
@@ -59,7 +67,6 @@ def extraction(file: str, extractor: str):
     return output
 
 def analyze_extraction_quality(text):
-    """Analyze the quality of extracted text"""
     if text.startswith("EXTRACTION_ERROR"):
         return 0, 0, 0, 0
     
