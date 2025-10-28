@@ -8,7 +8,7 @@ The libraries tested include:
 - pypdf
 - pdfplumber
 ### Installation of Libraries
-pip install pymupdf
-pip install pymupdf4llm
-pip install pypdf
+pip install pymupdf  
+pip install pymupdf4llm  
+pip install pypdf  
 pip install pdfplumberS
