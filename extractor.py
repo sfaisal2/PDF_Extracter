@@ -8,7 +8,7 @@ import os
 
 extractors = [
     "pymupdf",
-    "pymupdf4llm",  
+    "pymupdf4llm",
     "pypdf",
     "pdfplumber"
 ]
@@ -18,7 +18,24 @@ samples = [
     "sample2.pdf"
 ]
 
+def save_extracted_data(file: str, extractor: str, text: str):
+    """Save extracted text to a separate file for each combination"""
+    # Create a clean filename: extracted_{file}_{extractor}.txt
+    base_name = os.path.splitext(file)[0]  # Remove .pdf extension
+    output_filename = f"extracted_{base_name}_{extractor}.txt"
+    
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        if text.startswith("EXTRACTION_ERROR"):
+            f.write(f"EXTRACTION ERROR: {text}\n")
+        elif not text.strip():
+            f.write("NO TEXT EXTRACTED\n")
+        else:
+            f.write(text)
+    
+    return output_filename
+
 def get_baseline_char_count(file: str):
+    """Get baseline char count using pymupdf (most reliable)"""
     try:
         doc = fitz.open(file)
         text = ""
@@ -34,10 +51,8 @@ def extraction(file: str, extractor: str):
     try:
         if extractor == "pymupdf":
             doc = fitz.open(file)
-            text = ""
             for page in doc:
-                text += page.get_text()
-            output = text
+                output += page.get_text()
             doc.close()
             
         elif extractor == "pymupdf4llm":
@@ -45,18 +60,13 @@ def extraction(file: str, extractor: str):
             
         elif extractor == "pypdf":
             reader = PdfReader(file)
-            pages = reader.pages
-            text = ""
-            for page in pages:
-                text += page.extract_text() or ""
-            output = text
+            for page in reader.pages:
+                output += page.extract_text() or ""
             
         elif extractor == "pdfplumber":
             with pdfplumber.open(file) as pdf:
-                text = ""
                 for page in pdf.pages:
-                    text += page.extract_text() or ""
-                output = text
+                    output += page.extract_text() or ""
                 
         else: 
             raise ValueError(f"Invalid extractor: {extractor}")
@@ -68,20 +78,23 @@ def extraction(file: str, extractor: str):
 
 def main():
     results = []
-   
+    
+    print("🚀 Starting PDF Extraction Benchmark")
+    print("=" * 50)
+    
     # First, get baseline char counts for each file
     baseline_chars = {}
     for file in samples:
         if os.path.exists(file):
             baseline_chars[file] = get_baseline_char_count(file)
-            print(f"{file}: Baseline = {baseline_chars[file]} chars")
+            print(f"📊 {file}: Baseline = {baseline_chars[file]} chars")
     
     for file in samples:
         if not os.path.exists(file):
-            print(f"File not found: {file}, skipping...")
+            print(f"⚠️  File not found: {file}, skipping...")
             continue
             
-        print(f"\n Processing: {file}")
+        print(f"\n📄 Processing: {file}")
         
         for extractor in extractors:
             try:
@@ -104,36 +117,48 @@ def main():
                 else:
                     chars_status = "UNKNOWN"  # Can't determine without baseline
                 
-                # Store results - only the 4 metrics you want
+                # Save extracted text to separate file
+                output_filename = save_extracted_data(file, extractor, extracted_text)
+                
+                # Store results
                 result = {
                     'file': file,
                     'extractor': extractor,
                     'time_taken': time_taken,
                     'chars_status': chars_status,
                     'extracted_chars': extracted_char_count,
-                    'baseline_chars': baseline
+                    'baseline_chars': baseline,
+                    'output_file': output_filename
                 }
                 results.append(result)
                 
                 status_icon = "✅" if chars_status == "ALL_EXTRACTED" else "⚠️"
-                print(f"{status_icon} {time_taken}s | {chars_status}")
+                print(f"{status_icon} {time_taken}s | {chars_status} | Saved to: {output_filename}")
                 
             except Exception as e:
                 print(f"❌ FAILED: {str(e)}")
+                
+                # Save error to file anyway
+                base_name = os.path.splitext(file)[0]
+                output_filename = f"extracted_{base_name}_{extractor}.txt"
+                with open(output_filename, 'w', encoding='utf-8') as f:
+                    f.write(f"EXTRACTION FAILED: {str(e)}")
+                
                 results.append({
                     'file': file,
                     'extractor': extractor,
                     'time_taken': 0,
                     'chars_status': 'EXTRACTION_FAILED',
                     'extracted_chars': 0,
-                    'baseline_chars': baseline_chars.get(file, 0)
+                    'baseline_chars': baseline_chars.get(file, 0),
+                    'output_file': output_filename
                 })
     
     # Save to CSV
     if results:
         csv_filename = "extraction_results.csv"
         with open(csv_filename, 'w', newline='', encoding='utf-8') as csvfile:
-            fieldnames = ['file', 'extractor', 'time_taken', 'chars_status', 'extracted_chars', 'baseline_chars']
+            fieldnames = ['file', 'extractor', 'time_taken', 'chars_status', 'extracted_chars', 'baseline_chars', 'output_file']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             
             writer.writeheader()
