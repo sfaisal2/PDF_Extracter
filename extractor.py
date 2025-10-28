@@ -19,7 +19,6 @@ samples = [
 ]
 
 def save_extracted_data(file: str, extractor: str, text: str):
-    """Save extracted text to a separate file for each combination"""
     # Create a clean filename: extracted_{file}_{extractor}.txt
     base_name = os.path.splitext(file)[0]  # Remove .pdf extension
     output_filename = f"extracted_{base_name}_{extractor}.txt"
@@ -35,7 +34,6 @@ def save_extracted_data(file: str, extractor: str, text: str):
     return output_filename
 
 def get_baseline_char_count(file: str):
-    """Get baseline char count using pymupdf (most reliable)"""
     try:
         doc = fitz.open(file)
         text = ""
@@ -79,22 +77,18 @@ def extraction(file: str, extractor: str):
 def main():
     results = []
     
-    print("🚀 Starting PDF Extraction Benchmark")
-    print("=" * 50)
-    
-    # First, get baseline char counts for each file
     baseline_chars = {}
     for file in samples:
         if os.path.exists(file):
             baseline_chars[file] = get_baseline_char_count(file)
-            print(f"📊 {file}: Baseline = {baseline_chars[file]} chars")
+            print(f"{file}: Baseline = {baseline_chars[file]} chars")
     
     for file in samples:
         if not os.path.exists(file):
-            print(f"⚠️  File not found: {file}, skipping...")
+            print(f"  File not found: {file}, skipping...")
             continue
             
-        print(f"\n📄 Processing: {file}")
+        print(f"\n Processing: {file}")
         
         for extractor in extractors:
             try:
@@ -132,11 +126,10 @@ def main():
                 }
                 results.append(result)
                 
-                status_icon = "✅" if chars_status == "ALL_EXTRACTED" else "⚠️"
-                print(f"{status_icon} {time_taken}s | {chars_status} | Saved to: {output_filename}")
+                print(f"{time_taken}s | {chars_status} | Saved to: {output_filename}")
                 
             except Exception as e:
-                print(f"❌ FAILED: {str(e)}")
+                print(f"FAILED: {str(e)}")
                 
                 # Save error to file anyway
                 base_name = os.path.splitext(file)[0]
@@ -154,7 +147,6 @@ def main():
                     'output_file': output_filename
                 })
     
-    # Save to CSV
     if results:
         csv_filename = "extraction_results.csv"
         with open(csv_filename, 'w', newline='', encoding='utf-8') as csvfile:
@@ -165,24 +157,7 @@ def main():
             for result in results:
                 writer.writerow(result)
         
-        print(f"\n✅ Results saved to: {csv_filename}")
-        
-        # Print simple summary
-        print("\n📊 SUMMARY")
-        print("=" * 50)
-        for extractor in extractors:
-            extractor_results = [r for r in results if r['extractor'] == extractor]
-            successful = [r for r in extractor_results if r['chars_status'] == 'ALL_EXTRACTED']
-            times = [r['time_taken'] for r in successful if r['time_taken'] > 0]
-            
-            if times:
-                avg_time = sum(times) / len(times)
-                print(f"{extractor:15} - Avg: {avg_time:.3f}s | Complete: {len(successful)}/{len(extractor_results)}")
-            else:
-                print(f"{extractor:15} - No complete extractions")
-    
-    else:
-        print("❌ No results to save!")
+        print(f"\n Results saved to: {csv_filename}")
 
 if __name__ == "__main__":
     main()
