@@ -15,7 +15,8 @@ extractors = [
 
 samples = [
     "sample.pdf",
-    "sample2.pdf"
+    "sample2.pdf",
+    "sample3.pdf"
 ]
 
 def save_extracted_data(file: str, extractor: str, text: str):

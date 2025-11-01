@@ -1,0 +1,126 @@
+# Patient Registration Form American Dental Association
+
+www.ada.org
+
+
+**Email:** Today’s Date:
+
+
+Preferred Name: o Miss o Mr. o Mrs. o Ms. o Dr. Referred by:
+
+
+Name: Home Phone: _include area code_ Cell Phone: _include area code_
+
+Last First Middle ( ) ( )
+
+
+Address: City: State: Zip:
+Mailing address
+
+SS#: Date of Birth: Sex:  M  F
+
+
+Employer: Business Phone: _include area code_
+(     )
+
+
+Emergency Contact: Relationship: Home Phone: _include area code_ Cell Phone: _include area code_
+(     ) (     )
+
+
+College Student Status: o Full Time o Part Time Please provide school info: School Name:_______________________________________
+
+
+Employment Status: o Full Time o Part Time o Retired Address:_______________________________________
+
+
+Marital Status: o Married o Single o Divorced o Separated o Widowed Address 2:_______________________________________
+
+
+Pref. Pharmacy: Phone: (     ) City, State, Zip:_______________________________________
+
+# Dental Insurance Information
+
+
+**Primary Insurance Information**
+
+
+Name of Insured:____________________________________________________ Relationship to Patient: o Self o Spouse o Child o Other
+
+
+Insured Soc. Sec.:___________________________________________________ Insured Birth Date:______________________________________________
+
+
+Employer:_____________________________________________________ Ins. Company:_________________________________________________
+
+
+Address:_____________________________________________________ Address:_________________________________________________
+
+
+Address 2:_____________________________________________________ Address 2:_________________________________________________
+
+
+City, State, Zip:_____________________________________________________ City, State, Zip:_________________________________________________
+
+
+ID#:______________________________ Gr#: **_** __________________________
+
+
+**Secondary Insurance Information**
+
+
+Name of Insured:____________________________________________________ Relationship to Patient: o Self o Spouse o Child o Other
+
+
+Insured Soc. Sec.:___________________________________________________ Insured Birth Date:______________________________________________
+
+
+Employer:_____________________________________________________ Ins. Company:_________________________________________________
+
+
+Address:_____________________________________________________ Address:_________________________________________________
+
+
+Address 2:_____________________________________________________ Address 2:_________________________________________________
+
+
+City, State, Zip:_____________________________________________________ City, State, Zip:_________________________________________________
+
+
+ID#:______________________________ Gr#: **_** __________________________
+
+# Dental Information  For the following questions, mark (X) your responses to the following questions.
+
+
+
+**_**
+
+
+**_**
+
+
+
+**_**
+
+
+**_**
+
+
+
+**_**
+
+
+**_**
+
+
+**over**
+
+
+|Yes No DK<br>Do your gums bleed when you brush or floss?. . . . . . . . . . o o o<br>Are your teeth sensitive to cold, hot, sweets or pressure?. o o o<br>Is your mouth dry? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o o o<br>Have you had any periodontal (gum) treatments? . . . . . . . o o o<br>Have you ever had orthodontic (braces) treatments?. . . . . o o o<br>Have you had any problems associated with previous<br>dental treatment? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o o o<br>Is your home water supply fluoridated?. . . . . . . . . . . . . . . o o o<br>Do you drink bottled or filtered water?. . . . . . . . . . . . . . . . o o o<br>If yes, how often? Circle one: DAILY / WEEKLY / OCCASIONALLY<br>Are you currently experiencing dental pain or discomfort?. o o o|Yes No DK<br>Do you have earaches or neck pains? . . . . . . . . . . . . . . . . o o o<br>Do you have any clicking, popping or discomfort in the jaw?. o o o<br>Do you brux or grind your teeth? . . . . . . . . . . . . . . . . . . . . o o o<br>Do you have sores or ulcers in your mouth?. . . . . . . . . . . . o o o<br>Do you wear dentures or partials? . . . . . . . . . . . . . . . . . . . o o o<br>Do you participate in active recreational activities?. . . . . . o o o<br>Have you ever had a serious injury to your head or mouth? o o o|
+|---|---|
+|<br>**	Yes	 No	 DK**<br>Do your gums bleed when you brush or foss?. .  .  .  .  . o<br>o <br>o<br>Are your teeth sensitive to cold, hot, sweets or pressure?. o<br>o <br>o<br>Is your mouth dry? . .  .  .  .  .  .  .  .  .  .  .  .  .  .  . o<br>o <br>o<br>Have you had any periodontal (gum) treatments? . .  .  . o<br>o <br>o<br>Have you ever had orthodontic (braces) treatments?. .  . o<br>o <br>o<br>Have you had any problems associated with previous<br>dental treatment? . .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . o<br>o <br>o<br>Is your home water supply fuoridated?. .  .  .  .  .  .  . o<br>o <br>o<br>Do you drink bottled or fltered water?. .  .  .  .  .  .  .  . o<br>o <br>o<br>If yes, how often? Circle one:   DAILY   /   WEEKLY   /   OCCASIONALLY<br>Are you currently experiencing dental pain or discomfort?. o<br>o <br>o|Date of your last dental exam:<br>What was done at that time?|
+|<br>**	Yes	 No	 DK**<br>Do your gums bleed when you brush or foss?. .  .  .  .  . o<br>o <br>o<br>Are your teeth sensitive to cold, hot, sweets or pressure?. o<br>o <br>o<br>Is your mouth dry? . .  .  .  .  .  .  .  .  .  .  .  .  .  .  . o<br>o <br>o<br>Have you had any periodontal (gum) treatments? . .  .  . o<br>o <br>o<br>Have you ever had orthodontic (braces) treatments?. .  . o<br>o <br>o<br>Have you had any problems associated with previous<br>dental treatment? . .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . o<br>o <br>o<br>Is your home water supply fuoridated?. .  .  .  .  .  .  . o<br>o <br>o<br>Do you drink bottled or fltered water?. .  .  .  .  .  .  .  . o<br>o <br>o<br>If yes, how often? Circle one:   DAILY   /   WEEKLY   /   OCCASIONALLY<br>Are you currently experiencing dental pain or discomfort?. o<br>o <br>o|Date of last dental x-rays:|
+|What is the reason for your dental visit today?|What is the reason for your dental visit today?|
+|How do you feel about your smile?|How do you feel about your smile?|
+
+
