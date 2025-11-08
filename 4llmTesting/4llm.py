@@ -4,10 +4,7 @@ import os
 
 samples = [
     "ali.pdf",
-    "apl.pdf",
-    "BCBSAl.pdf",
-    "Guardian.pdf",
-    "umr.pdf"
+    "aplwo.pdf"
 ]
 
 def save_extracted_data(file: str, text: str):
