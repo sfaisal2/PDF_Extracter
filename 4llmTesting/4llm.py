@@ -3,8 +3,7 @@ import csv
 import os
 
 samples = [
-    "ali.pdf",
-    "aplwo.pdf"
+    "BCBSAlwo.pdf"
 ]
 
 def save_extracted_data(file: str, text: str):
