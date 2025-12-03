@@ -1,5 +1,6 @@
 import os
-import docling_core
+import sys
+from docling_core import PdfToDocumentPipeline  # Correct import
 
 samples = [
     "ali.pdf",
@@ -30,8 +31,8 @@ def test_ocrmypdf(file: str):
 def test_docling(file: str):
     """Test Docling extraction"""
     try:
-        # Initialize Docling converter
-        converter = docling_core.pipeline.PdfToDocumentPipeline()
+        # Initialize Docling converter - CORRECTED
+        converter = PdfToDocumentPipeline()
         
         # Process the PDF (first 3 pages)
         result = converter.convert(file, max_pages=3)
