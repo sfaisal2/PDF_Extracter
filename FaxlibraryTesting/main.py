@@ -1,6 +1,5 @@
 import os
 import sys
-from docling_core import PdfToDocumentPipeline  # Correct import
 
 samples = [
     "ali.pdf",
@@ -28,31 +27,9 @@ def test_ocrmypdf(file: str):
     except Exception as e:
         return f"OCR_ERROR: {str(e)}"
 
-def test_docling(file: str):
-    """Test Docling extraction"""
-    try:
-        # Initialize Docling converter - CORRECTED
-        converter = PdfToDocumentPipeline()
-        
-        # Process the PDF (first 3 pages)
-        result = converter.convert(file, max_pages=3)
-        
-        # Extract text
-        text = result.document.plain_text
-        
-        # Save to file
-        output_file = f"docling_{os.path.splitext(file)[0]}.txt"
-        
-        with open(output_file, 'w', encoding='utf-8') as f:
-            f.write(text)
-            
-        return f"SUCCESS: {output_file} ({len(text)} chars)"
-        
-    except Exception as e:
-        return f"DOCLING_ERROR: {str(e)}"
 
 def main():
-    print("Testing OCRmyPDF and Docling\n")
+    print("Testing OCRmyPDF")
     
     for file in samples:
         if not os.path.exists(file):
@@ -65,11 +42,6 @@ def main():
         print("  OCRmyPDF...", end=" ")
         ocr_result = test_ocrmypdf(file)
         print(ocr_result)
-        
-        # Test Docling  
-        print("  Docling...", end=" ")
-        docling_result = test_docling(file)
-        print(docling_result)
         
         print()
 
