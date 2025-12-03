@@ -31,7 +31,7 @@ def test_docling(file: str):
     """Test Docling extraction"""
     try:
         # Initialize Docling converter
-        converter = docling.pipeline.PdfToDocumentPipeline()
+        converter = docling_core.pipeline.PdfToDocumentPipeline()
         
         # Process the PDF (first 3 pages)
         result = converter.convert(file, max_pages=3)
