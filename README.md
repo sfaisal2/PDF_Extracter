@@ -13,5 +13,6 @@ pip install pymupdf4llm
 pip install pypdf  
 pip install pdfplumberS
 choco install tesseract
+choco install ghostscript
 pip install ocrmypdf
-pip install docling-core
+pip install docling

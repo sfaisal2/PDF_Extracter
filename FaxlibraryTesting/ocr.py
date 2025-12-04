@@ -10,12 +10,9 @@ samples = [
 ]
 
 def test_ocrmypdf(file: str):
-    """Test OCRmyPDF by running it on the file"""
     try:
-        # Create output filename
         output_file = f"ocr_{file}"
         
-        # Run OCRmyPDF using os.system
         command = f'ocrmypdf --force-ocr "{file}" "{output_file}"'
         return_code = os.system(command)
         
