@@ -13,7 +13,7 @@ def minimal_docling_test():
         }
     )
     
-    for pdf_file in ["ali.pdf"]:#, "apl.pdf", "BCBSAl.pdf", "Guardian.pdf", "umr.pdf"]:
+    for pdf_file in ["ali2.pdf"]:#, "apl.pdf", "BCBSAl.pdf", "Guardian.pdf", "umr.pdf"]:
         if os.path.exists(pdf_file):
             print(f"\nProcessing {pdf_file}...")
             try:
