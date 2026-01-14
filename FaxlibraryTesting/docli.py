@@ -1,15 +1,18 @@
 from docling.document_converter import DocumentConverter
+import os
 
-source = "samp.pdf"
+files = ["apl.pdf"]#, "BCBS.pdf", "Delta.pdf", "Guardian.pdf", "UMR.pdf"]
 converter = DocumentConverter()
-result = converter.convert(source)
+for source in files:
+  result = converter.convert(source)
 
-# Export to markdown
-markdown_content = result.document.export_to_markdown()
+  # Export to markdown
+  markdown_content = result.document.export_to_markdown()
 
-# Save to file
-output_file = "output.md"
-with open(output_file, "w") as f:
-  f.write(markdown_content)
+  base_name = os.path.splitext(os.path.basename(source))[0]
+  output_file = f"{base_name}_converted.md"
 
-print(f"Successfully converted {source} to {output_file}")
+  with open(output_file, 'w', encoding='utf-8') as f:
+      f.write(markdown_content)
+
+  print(f"Successfully converted {source} to {output_file}")

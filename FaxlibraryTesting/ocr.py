@@ -2,10 +2,6 @@ import os
 import sys
 
 samples = [
-    "ali.pdf",
-    "apl.pdf", 
-    "BCBSAl.pdf",
-    "Guardian.pdf",
     "umr.pdf"
 ]
 
