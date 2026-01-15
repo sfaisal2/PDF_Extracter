@@ -1,7 +1,7 @@
 from docling.document_converter import DocumentConverter
 import os
 
-files = ["apl.pdf"]#, "BCBS.pdf", "Delta.pdf", "Guardian.pdf", "UMR.pdf"]
+files = ["apl2.pdf", "guardian1.pdf", "umr1.pdf"]#, "BCBS.pdf", "Delta.pdf", "Guardian.pdf", "UMR.pdf"]
 converter = DocumentConverter()
 for source in files:
   result = converter.convert(source)
